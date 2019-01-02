@@ -1,10 +1,11 @@
 //
 // Created by miladibra on 1/1/19.
 //
+#include "types.h"
 
 void printf(char* str)
 {
-  static unsigned short* VideoMemory = (unsigned short*)0xb8000;
+  static uint16_t* VideoMemory = (uint16_t*)0xb8000;
 
   for(int i = 0; str[i] != '\0'; ++i)
     VideoMemory[i] = (VideoMemory[i] & 0xFF00) | str[i];
@@ -23,9 +24,9 @@ extern "C" void callConstructors()
 
 
 
-extern "C" void kernelMain(const void* multiboot_structure, unsigned int /*multiboot_magic*/)
+extern "C" void kernelMain(const void* multiboot_structure, uint16_t /*multiboot_magic*/)
 {
-  printf("Hello World! --- http://www.AlgorithMan.de");
+  printf("Milad's Own Operating System !!!");
 
   while(1);
 }
