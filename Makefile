@@ -39,5 +39,4 @@ run : mykernel.iso
 	VirtualBox --startvm 'My Operating System' &
 
 clean :
-	rm *.o
-	rm *.iso
+	rm $(objects) *.bin *.iso
