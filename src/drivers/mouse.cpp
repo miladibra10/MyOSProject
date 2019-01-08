@@ -1,7 +1,10 @@
 //
 // Created by miladibra on 1/4/19.
 //
-#include "mouse.h"
+#include <drivers/mouse.h>
+using namespace myos::common;
+using namespace myos::drivers;
+using namespace myos::hardwarecommunication;
 void printf(char*);
 
 

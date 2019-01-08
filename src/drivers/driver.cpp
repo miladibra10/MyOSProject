@@ -2,7 +2,9 @@
 // Created by miladibra on 1/8/19.
 //
 
-#include "driver.h"
+#include <drivers/driver.h>
+//using namespace myos::common;
+using namespace myos::drivers;
 
 Driver::Driver() {
 
