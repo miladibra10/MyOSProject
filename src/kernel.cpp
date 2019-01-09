@@ -4,11 +4,13 @@
 #include <common/types.h>
 #include <gdt.h>
 #include <hardwarecommunication/interrupts.h>
+#include <multitasking.h>
 #include <hardwarecommunication/pci.h>
 #include <drivers/driver.h>
 #include <drivers/keyboard.h>
 #include <drivers/mouse.h>
 #include <drivers/vga.h>
+
 
 using namespace myos;
 using namespace myos::common;
@@ -110,6 +112,17 @@ public:
 
 };
 
+void taskA()
+{
+    while(true)
+        printf("A");
+}
+void taskB()
+{
+    while(true)
+        printf("B");
+}
+
 typedef void (*constructor)();
 extern "C" constructor start_ctors;
 extern "C" constructor end_ctors;
@@ -125,7 +138,12 @@ extern "C" void kernelMain(const void* multiboot_structure, uint16_t /*multiboot
 {
   printf("Milad's Own Operating System !!!\n");
   GlobalDescriptorTable gdt;
-  InterruptManager interrupts(0x20, &gdt);
+  TaskManager taskManager;
+  Task task1(&gdt, taskA);
+  Task task2(&gdt, taskB);
+  taskManager.AddTask(&task1);
+  taskManager.AddTask(&task2);
+  InterruptManager interrupts(0x20, &gdt, &taskManager);
   printf("Initializing Driver Manager...\n");
   DriverManager driverManager;
   PrintfKeyboardEventHandler printfKeyboardEventHandler;
@@ -142,10 +160,10 @@ extern "C" void kernelMain(const void* multiboot_structure, uint16_t /*multiboot
   printf("Initializing Interrupts...\n");
   interrupts.Activate();
 
-    vga.SetMode(320,200,8);
-    for(int32_t y = 0; y < 200; y++)
-        for(int32_t x = 0; x < 320; x++)
-            vga.PutPixel(x, y, 0x00, 0x00, 0xA8);
+//    vga.SetMode(320,200,8);
+//    for(int32_t y = 0; y < 200; y++)
+//        for(int32_t x = 0; x < 320; x++)
+//            vga.PutPixel(x, y, 0x00, 0x00, 0xA8);
 
   while(1);
 }

@@ -1,5 +1,6 @@
 
 #include <hardwarecommunication/interrupts.h>
+using namespace myos;
 using namespace myos::common;
 using namespace myos::hardwarecommunication;
 
@@ -37,12 +38,13 @@ void InterruptManager::SetInterruptDescriptorTableEntry(uint8_t interrupt,
 }
 
 
-InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, GlobalDescriptorTable* globalDescriptorTable)
+InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, GlobalDescriptorTable* globalDescriptorTable, TaskManager* taskManager)
     : programmableInterruptControllerMasterCommandPort(0x20),
       programmableInterruptControllerMasterDataPort(0x21),
       programmableInterruptControllerSlaveCommandPort(0xA0),
       programmableInterruptControllerSlaveDataPort(0xA1)
 {
+  this->taskManager = taskManager;
   this->hardwareInterruptOffset = hardwareInterruptOffset;
   uint32_t CodeSegment = globalDescriptorTable->CodeSegmentSelector();
   const uint8_t IDT_INTERRUPT_GATE = 0xE;
@@ -163,6 +165,10 @@ uint32_t InterruptManager::DoHandlerInterrupt(uint8_t interrupt, uint32_t esp) {
     foo[22] = hex[(interrupt >> 4) & 0xF];
     foo[23] = hex[interrupt & 0xF];
     printf(foo);
+  }
+
+  if( interrupt == hardwareInterruptOffset){
+    esp = (uint32_t)taskManager->Schedule((CPUState*)esp);
   }
 
   if(hardwareInterruptOffset <= interrupt && interrupt < hardwareInterruptOffset+16)
