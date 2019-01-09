@@ -144,6 +144,7 @@ BaseAddressRegister PeripheralComponentInterconnectController::GetBaseAddressReg
 
 Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponentInterconnectDeviceDescriptor dev, InterruptManager* interrupts)
 {
+    Driver *driver = 0;
     switch(dev.vendor_id)
     {
         case 0x1022: // AMD
@@ -169,7 +170,7 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
             }
             break;
     }
-    return 0;
+    return driver;
 }
 
 

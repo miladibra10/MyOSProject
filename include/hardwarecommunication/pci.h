@@ -9,6 +9,7 @@
 #include <drivers/driver.h>
 #include <common/types.h>
 #include <hardwarecommunication/interrupts.h>
+#include <memorymanagement.h>
 
 namespace myos {
     namespace hardwarecommunication {
