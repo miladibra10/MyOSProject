@@ -134,7 +134,7 @@ extern "C" void kernelMain(const void* multiboot_structure, uint16_t /*multiboot
   driverManager.AddDriver(&keyboard);
   driverManager.AddDriver(&mouse);
   PeripheralComponentInterconnectController PCIController;
-  PCIController.SelectDrivers(&driverManager);
+  PCIController.SelectDrivers(&driverManager, &interrupts);
   printf("Activating Drivers...\n");
   driverManager.ActivateAll();
   printf("Initializing Interrupts...\n");
